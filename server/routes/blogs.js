@@ -10,7 +10,7 @@ router.post('/', auth, uploadFunction, addBlog)
 router.get('/', getAllBlog)
 router.get('/:id', getOneBlog)
 router.get('/category/:category', getAllBlog)
-router.put('/:id', auth, updateBlog)
-router.delete('/:id', auth, uploadFunction, deleteBlog)
+router.put('/:id', auth, uploadFunction, updateBlog)
+router.delete('/:id', auth, deleteBlog)
 
 module.exports = router;

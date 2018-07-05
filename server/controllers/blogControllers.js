@@ -1,5 +1,13 @@
 const { Blog } = require('../models')
 const mongoose = require('mongoose')
+const Storage = require('@google-cloud/storage');
+
+const storage =  Storage({
+    projectId: process.env.GCLOUD_PROJECT,
+    keyFilename: process.env.KEYFILE_PATH
+});
+
+const bucketName = process.env.CLOUD_BUCKET;
 
 module.exports = {
     addBlog:(req,res)=>{
@@ -52,25 +60,18 @@ module.exports = {
     updateBlog:(req,res)=>{
         Blog.findById(req.params.id)
         .then(blogFound=>{
+            const filename = blogFound.image.split('/')[blogFound.image.split('/').length-1];
             if(req.user.id !== blogFound.author.toString()){
                 return res.status(403).json({
                     msg:'tidak bisa update blog yang bukan milikmu!'
                 })
             }else{
                 if(req.file){
-                    const Storage = require('@google-cloud/storage');
-
-                    const storage = new Storage();
-    
-                    const bucketName = process.env.CLOUD_BUCKET;
-                    const filename = blogFound.image.split('/')[blogFound.image.split('/').length-1];
                     storage
                     .bucket(bucketName)
                     .file(filename)
                     .delete()
                     .then(() => {
-                        console.log(bucketName)
-                        console.log(filename)
                         blogFound.image = req.file.cloudStoragePublicUrl
                         blogFound.content = req.body.content
                         blogFound.title = req.body.title
@@ -103,17 +104,36 @@ module.exports = {
     deleteBlog:(req,res)=>{
         Blog.findById(req.params.id)
         .then(blogFound=>{
+            const filename = blogFound.image.split('/')[blogFound.image.split('/').length-1];
             if(req.user.id !== blogFound.author.toString()){
                 return res.status(403).json({
                     msg:'tidak bisa update blog yang bukan milikmu!'
                 })
             }else{
-                blogFound.remove(error=>{
-                    if(error) return res.status(500).json(error)
-                    res.status(200).json({
-                        msg:'blog berhasil dihapus!'
+                if(blogFound.image){
+                    storage
+                    .bucket(bucketName)
+                    .file(filename)
+                    .delete()
+                    .then(() => {
+                        return blogFound.remove(error=>{
+                            if(error) return res.status(500).json(error)
+                            res.status(200).json({
+                                msg:'blog berhasil dihapus!'
+                            })
+                        })
                     })
-                })
+                    .catch(err => {
+                        return res.status(500).json(err)
+                    });   
+                }else{
+                    blogFound.remove(error=>{
+                        if(error) return res.status(500).json(error)
+                        res.status(200).json({
+                            msg:'blog berhasil dihapus!'
+                        })
+                    })
+                }
             }
         })
         .catch(errors=>{

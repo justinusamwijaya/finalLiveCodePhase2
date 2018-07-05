@@ -1,0 +1,133 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+a,p,li{
+    font-size:1.6rem;
+}
+
+h3{
+    font-size:2rem !important;
+}
+
+h2{
+    font-size:4rem !important;
+}
+
+h1{
+    font-size:6rem !important;
+}
+
+select{
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background:rgba(0,0,0,0);
+    padding: 5rem;
+}
+
+select:focus {
+    outline: none;
+}
+
+.navbar{
+    position:fixed !important;
+    border-radius:0px !important;
+    top:0rem;
+    width:100%;
+    display:flex !important;
+    justify-content: center !important;
+    z-index:1000;
+}
+
+.navbar:hover{
+    transition: all 1s;
+}
+
+#brand{
+    color:white;
+    font-size:4rem;
+}
+
+#highlightContainer{
+    margin-top:9rem;
+    padding:3rem 5rem 3rem 5rem;
+    height:50rem;
+}
+
+#highlight{
+    height:100%;
+    overflow:hidden;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#highlight img{
+    max-width:100%;
+}
+
+#categories{
+    height:40rem;
+    padding:1rem 2rem 1rem 3rem;
+    text-align: center;
+    font-size: 2rem;
+}
+
+#categories ul{
+    padding:0;
+}
+
+#categories ul li{
+    list-style: none;
+}
+
+#listCategories{
+    height:40rem;
+    padding:1rem;
+}
+
+#smallCarousel{
+    height:20rem;
+    padding:6rem;
+}
+
+#topListing{
+    padding:3rem;
+    z-index:500;
+    position:static;
+}
+
+.topListingfixed{
+    position:fixed !important;
+    top:7rem;
+}
+
+#otherListings{
+    min-height:90rem;
+}
+
+@media screen and (max-width:576px){
+    #topListing{
+        height:25rem;
+    }
+}
+@media screen and (min-width:576px){
+    #topListing{
+        height:25rem;
+    }
+}
+@media screen and (min-width:768px){
+    #topListing{
+        height:70rem;
+    }
+}
+@media screen and (min-width:992px){
+    #topListing{
+        height:70rem;
+    }
+}
