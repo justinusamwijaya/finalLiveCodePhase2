@@ -4,11 +4,11 @@
             <router-link id="brand" :to="{path:'/'}">JustBlog</router-link >
         </b-navbar-brand>
         <div id="right-menu">
-            <a v-if="!$store.state.loggedIn" @click="showLoginModal = !showLoginModal">Login</a>
-            <router-link :to="{path:'/profile'}" tag="a" v-if="$store.state.loggedIn" >{{loggedUsername}}</router-link >
-            <a v-if="$store.state.loggedIn" @click="logout()">logout</a>
+            <a v-if="!loggedIn" @click="showLoginModal = !showLoginModal">Login</a>
+            <router-link :to="{path:'/profile/' + userId}" tag="a" v-if="loggedIn" >{{username}}</router-link >
+            <a v-if="loggedIn" @click="logout()">logout</a>
         </div>
-        <div v-if="showLoginModal && !$store.state.loggedIn" id="loginModal" class="card">
+        <div v-if="showLoginModal && !loggedIn" id="loginModal" class="card">
             <a id="closeModal" @click="showLoginModal = !showLoginModal">x</a>
             <form v-if="loginModal" @submit="login($event)" method="post">
                 <label>username</label>
@@ -44,17 +44,21 @@ export default {
       usernameSignup: '',
       emailSignup: '',
       passwordSignup: '',
-      loggedUsername: localStorage.getItem('username')
     }
   },
   created () {
   },
   computed: {
     ...mapState([
+        'username',
+        'loggedIn',
+        'userId'
     ])
   },
   methods: {
     ...mapActions([
+        'loginAction',
+        'logoutAction'
     ]),
     login: function (event) {
       event.preventDefault()
@@ -67,9 +71,9 @@ export default {
           localStorage.setItem('token', result.data.token)
           localStorage.setItem('username', result.data.username)
           localStorage.setItem('id', result.data.id)
-          this.loggedUsername = localStorage.getItem('username')
-          this.$store.state.loggedIn = true
           this.showLoginModal = false
+          this.loginAction()
+
         })
         .catch(error => {
           console.log(error.response)
@@ -96,7 +100,7 @@ export default {
       localStorage.removeItem('username')
       localStorage.removeItem('id')
       window.location.href = '/'
-      this.$store.state.loggedIn = false
+      this.logoutAction()
     }
   }
 }
@@ -218,7 +222,7 @@ button:active, button:focus{
         width:25% !important;
         a{
             font-size: 1.2rem !important;
-        }  
+        }
     }
 }
 </style>

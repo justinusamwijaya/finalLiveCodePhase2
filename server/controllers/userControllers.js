@@ -1,7 +1,7 @@
 const { User } = require('../models')
 module.exports = {
     getUser:(req,res)=>{
-        User.find({_id:req.params.id})
+        User.findOne({_id:req.params.id})
         .populate('blogs')
         .exec()
         .then(blogsFound =>{
