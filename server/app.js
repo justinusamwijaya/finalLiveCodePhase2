@@ -13,5 +13,5 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/', Router);
 
-
-module.exports = app;
+app.listen(3000,console.log('okay'))
+// module.exports = app;
